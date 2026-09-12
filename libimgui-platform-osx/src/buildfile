@@ -1,6 +1,7 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui}
 
 # Public headers.
 #
@@ -14,7 +15,22 @@ lib{imgui-platform-osx}: libul{imgui-platform-osx}: $pub/{$pub_hdrs}
 
 # Private headers and sources as well as dependencies.
 #
+# This backend is macOS-only (Objective-C++); exclude the source on other
+# platforms so the library builds (empty) instead of failing to compile.
+#
 libul{imgui-platform-osx}: {hxx cxx}{**} $impl_libs $intf_libs
+libul{imgui-platform-osx}: mm{imgui_impl_osx}: include = ($cxx.target.class == 'macos')
+
+# __bridge_retained in imgui_impl_osx.mm retains only under ARC.
+# The other two flags silence upstream warnings that are not our bug:
+# a GNU ?: with the middle operand omitted, and a deprecated AppKit call.
+#
+if ($cxx.target.class == 'macos')
+{
+  cxx.coptions += -fobjc-arc -Wno-gnu-conditional-omitted-operand \
+                  -Wno-deprecated-declarations
+  cxx.libs += -framework Cocoa -framework Carbon -framework GameController
+}
 
 libs{imgui-platform-osx}: def{imgui-platform-osx}: include = ($cxx.target.system == 'win32-msvc')
 def{imgui-platform-osx}: libul{imgui-platform-osx}
@@ -39,6 +55,9 @@ lib{imgui-platform-osx}:
   cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
   cxx.export.libs = $intf_libs
 }
+
+if ($cxx.target.class == 'macos')
+  lib{imgui-platform-osx}: cxx.export.libs += -framework Cocoa -framework Carbon -framework GameController
 
 # For pre-releases use the complete version to make sure they cannot
 # be used in place of another pre-release or the final version. See
