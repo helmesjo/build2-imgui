@@ -1,3 +1,4 @@
 import libs = libimgui-platform-osx%lib{imgui-platform-osx}
 
-exe{driver}: {hxx cxx}{**} $libs testscript{**}
+./: exe{driver}: include = ($cxx.target.class == 'macos')
+exe{driver}: {hxx cxx mm}{**} $libs testscript{**}
