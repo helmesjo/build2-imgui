@@ -1,6 +1,8 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui} \
+                    libvulkan-loader%lib{vulkan}
 
 # Public headers.
 #
