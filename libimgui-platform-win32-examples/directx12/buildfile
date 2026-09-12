@@ -1,0 +1,16 @@
+libs =
+import libs += libimgui-platform-win32%lib{imgui-platform-win32} \
+               libimgui-render-dx12%lib{imgui-render-dx12} \
+               libdirectx-guids%liba{directx-guids}
+
+exe{example-directx12}: {hxx cxx}{**} $libs
+
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+# This example calls D3D12CreateDevice and CreateDXGIFactory1 itself, in
+# addition to what the backend does.
+#
+if ($cxx.target.system == 'mingw32')
+  exe{example-directx12}: cxx.libs += -ld3d12 -ldxgi
+else
+  exe{example-directx12}: cxx.libs += d3d12.lib dxgi.lib

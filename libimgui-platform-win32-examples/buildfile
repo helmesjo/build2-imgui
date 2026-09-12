@@ -1,1 +1,5 @@
-./: {*/ -build/} doc{README.md PACKAGE-README.md CHANGELOG.txt} legal{LICENSE.txt} manifest
+# This whole package is Windows-only (see manifest).
+#
+./: {*/ -build/ -opengl3/ -vulkan/ -directx12/} doc{README.md PACKAGE-README.md CHANGELOG.txt} legal{LICENSE.txt} manifest
+
+./: {opengl3/ vulkan/ directx12/}: include = ($cxx.target.class == 'windows')

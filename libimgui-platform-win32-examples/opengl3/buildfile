@@ -1,0 +1,17 @@
+libs =
+import libs += libimgui-platform-win32%lib{imgui-platform-win32} \
+               libimgui-render-opengl3%lib{imgui-render-opengl3}
+
+exe{example-opengl3}: {hxx cxx}{**} $libs
+
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+# This example calls a handful of raw GL functions itself (glClear,
+# glClearColor, glViewport) in addition to what the backend renders, plus
+# the raw GDI pixel-format calls (ChoosePixelFormat, SetPixelFormat,
+# SwapBuffers) needed to set up a GL-capable window.
+#
+if ($cxx.target.system == 'mingw32')
+  exe{example-opengl3}: cxx.libs += -lopengl32 -lgdi32
+else
+  exe{example-opengl3}: cxx.libs += opengl32.lib gdi32.lib
