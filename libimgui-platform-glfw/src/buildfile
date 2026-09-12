@@ -1,6 +1,8 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui}
+import impl_libs += glfw%lib{glfw}
 
 # Public headers.
 #
@@ -28,6 +30,12 @@ src_pfx_src = [dir_path] $src_root/src/
 
 cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
                 "-I$out_pfx_inc" "-I$src_pfx_inc"
+
+# GLFW's own glfw3.h pulls in <GL/gl.h> unless told not to; we use our own
+# OpenGL loader (imgui_impl_opengl3_loader.h), so we never want it, and on
+# some platforms (e.g. FreeBSD) that header isn't even present.
+#
+cxx.poptions += -DGLFW_INCLUDE_NONE
 
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
