@@ -21,3 +21,6 @@ location: libimgui-render-metal/
 
 :
 location: libimgui-render-dx12/
+
+:
+location: libimgui-platform-glfw-examples/
