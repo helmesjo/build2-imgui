@@ -1,34 +1,16 @@
-#include <sstream>
-#include <stdexcept>
+#include <imgui_impl_opengl3.h>
 
-#include <imgui-render-opengl3.h>
+// Smoke test: every entry point needs a current OpenGL context, which needs
+// a real window and GPU that a headless CI environment does not have. So
+// they are only referenced: the test runs without arguments so the branch
+// is never taken, but the symbols still have to resolve at link time.
 
-#undef NDEBUG
-#include <cassert>
-
-int main ()
+int main (int argc, char*[])
 {
-  using namespace std;
-  using namespace imgui_render_opengl3;
-
-  // Basics.
-  //
+  if (argc > 1)
   {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
+    ImGui_ImplOpenGL3_Init ();
+    ImGui_ImplOpenGL3_NewFrame ();
+    ImGui_ImplOpenGL3_Shutdown ();
   }
 }
