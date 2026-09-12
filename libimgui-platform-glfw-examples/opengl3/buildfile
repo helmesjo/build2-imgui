@@ -1,0 +1,18 @@
+libs =
+import libs += libimgui-platform-glfw%lib{imgui-platform-glfw} \
+               libimgui-render-opengl3%lib{imgui-render-opengl3} \
+               glfw%lib{glfw}
+
+exe{example-opengl3}: {hxx cxx}{**} $libs
+
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+# This example calls a handful of raw GL functions itself (glClear,
+# glClearColor, glViewport) in addition to what the backend renders.
+#
+if ($cxx.target.class == 'windows')
+  exe{example-opengl3}: cxx.libs += ($cxx.target.system == 'mingw32' ? -lopengl32 : opengl32.lib)
+elif ($cxx.target.class == 'macos')
+  exe{example-opengl3}: cxx.libs += -framework OpenGL
+elif ($cxx.target.class == 'linux')
+  exe{example-opengl3}: cxx.libs += -lGL

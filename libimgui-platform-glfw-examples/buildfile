@@ -1,1 +1,6 @@
-./: {*/ -build/} doc{README.md PACKAGE-README.md CHANGELOG.txt} legal{LICENSE.txt} manifest
+./: {*/ -build/ -metal/} doc{README.md PACKAGE-README.md CHANGELOG.txt} legal{LICENSE.txt} manifest
+
+# The metal example needs a real GLFW-created Cocoa window bridged to a
+# CAMetalLayer, so it only makes sense on macOS.
+#
+./: metal/: include = ($cxx.target.class == 'macos')
