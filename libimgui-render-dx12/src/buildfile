@@ -1,6 +1,9 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui} \
+                    libdirectx-headers%lib{directx-headers}
+import impl_libs += libdirectx-guids%liba{directx-guids}
 
 # Public headers.
 #
@@ -14,7 +17,19 @@ lib{imgui-render-dx12}: libul{imgui-render-dx12}: $pub/{$pub_hdrs}
 
 # Private headers and sources as well as dependencies.
 #
-libul{imgui-render-dx12}: {hxx cxx}{**} $impl_libs $intf_libs
+# This backend is Windows-only; exclude the source on other platforms so
+# the library builds (empty) instead of failing to compile.
+#
+libul{imgui-render-dx12}: {hxx cxx}{** -imgui_impl_dx12} $impl_libs $intf_libs
+libul{imgui-render-dx12}: cxx{imgui_impl_dx12}: include = ($cxx.target.class == 'windows')
+
+if ($cxx.target.class == 'windows')
+{
+  if ($cxx.target.system == 'mingw32')
+    cxx.libs += -ld3dcompiler -ldxgi
+  else
+    cxx.libs += d3dcompiler.lib dxgi.lib
+}
 
 libs{imgui-render-dx12}: def{imgui-render-dx12}: include = ($cxx.target.system == 'win32-msvc')
 def{imgui-render-dx12}: libul{imgui-render-dx12}
