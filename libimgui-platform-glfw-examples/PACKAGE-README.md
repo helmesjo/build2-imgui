@@ -1,45 +1,36 @@
-# libimgui-platform-glfw-examples - An executable
+# libimgui-platform-glfw-examples - Dear ImGui platform backend for GLFW (examples)
 
-This is a `build2` package for the [`<UPSTREAM-NAME>`](https://<UPSTREAM-URL>)
-executable. It is a <SUMMARY-OF-FUNCTIONALITY>.
+This is a `build2` package containing the examples for the
+[Dear ImGui](https://github.com/ocornut/imgui) GLFW platform backend,
+built from its `docking` branch: `example_glfw_opengl3`,
+`example_glfw_vulkan`, and `example_glfw_metal` (macOS only).
 
-Note that the `libimgui-platform-glfw-examples` executable in this package provides `build2` metadata.
+`example_glfw_opengl3` is unmodified from upstream. `example_glfw_metal`
+and `example_glfw_vulkan` carry small local patches (see their
+`main.mm.patch`/`main.cpp.patch`):
 
-
-## Usage
-
-To start using `libimgui-platform-glfw-examples` in your project, add the following build-time
-`depends` value to your `manifest`, adjusting the version constraint as
-appropriate:
-
-```
-depends: * libimgui-platform-glfw-examples ^<VERSION>
-```
-
-Then import the executable in your `buildfile`:
-
-```
-import! [metadata] <TARGET> = libimgui-platform-glfw-examples%exe{<TARGET>}
-```
+- `example_glfw_metal` fixes multi-viewport support with the Metal backend
+  (a docking-branch regression: the fix for this was applied upstream in
+  2022 but lost in a later merge from `master`).
+- `example_glfw_vulkan` loads MoltenVK directly on macOS (its own
+  recommended integration mode) instead of relying on system-wide Vulkan
+  ICD discovery, which is otherwise not guaranteed to find MoltenVK. On
+  macOS this package additionally depends on `libmoltenvk`. Because GLFW's
+  own `glfwVulkanSupported()`/`glfwCreateWindowSurface()` decide Vulkan
+  surface support from a driver-enumeration call made before any instance
+  exists, they can never see a driver loaded this way. The example builds
+  its window surface directly with `vkCreateMetalSurfaceEXT` instead, and
+  runs with multi-viewport support (`ImGuiConfigFlags_ViewportsEnable`)
+  disabled on macOS, since `imgui_impl_glfw.cpp`'s own secondary-viewport
+  surface creation hits the same GLFW limitation from inside the shared
+  platform backend.
 
 
 ## Importable targets
 
-This package provides the following importable targets:
-
-```
-exe{<TARGET>}
-```
-
-<DESCRIPTION-OF-IMPORTABLE-TARGETS>
+This package exports no targets.
 
 
 ## Configuration variables
 
-This package provides the following configuration variables:
-
-```
-[bool] config.libimgui_platform_glfw_examples.<VARIABLE> ?= false
-```
-
-<DESCRIPTION-OF-CONFIG-VARIABLES>
+This package provides no configuration variables.
