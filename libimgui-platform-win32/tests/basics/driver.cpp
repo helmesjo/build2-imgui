@@ -1,34 +1,28 @@
-#include <sstream>
-#include <stdexcept>
+#include <imgui_impl_win32.h>
 
-#include <imgui-platform-win32.h>
+// Smoke test: this backend is Windows-only (see manifest and src/buildfile).
+// On other platforms the library is intentionally empty, so there is
+// nothing to test there.
+//
+// ImGui_ImplWin32_EnableDpiAwareness() works without a window. The rest
+// needs one, so it is only referenced: the test runs without arguments so
+// the branch is never taken, but the symbols still have to resolve at link
+// time.
 
-#undef NDEBUG
-#include <cassert>
-
-int main ()
+#ifdef _WIN32
+int main (int argc, char*[])
 {
-  using namespace std;
-  using namespace imgui_platform_win32;
+  ImGui_ImplWin32_EnableDpiAwareness ();
 
-  // Basics.
-  //
+  if (argc > 1)
   {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
+    ImGui_ImplWin32_Init (nullptr);
+    ImGui_ImplWin32_NewFrame ();
+    ImGui_ImplWin32_Shutdown ();
   }
 }
+#else
+int main ()
+{
+}
+#endif
