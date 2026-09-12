@@ -1,34 +1,15 @@
-#include <sstream>
-#include <stdexcept>
-
-#include <imgui-render-metal.h>
+#include <imgui_impl_metal.h>
 
 #undef NDEBUG
 #include <cassert>
 
+// Smoke test: creating a real MTL::Device needs a GPU, which a headless CI
+// runner may not have, so this only proves the library links, the
+// metal-cpp (C++, not Objective-C++) API surface is what's declared (see
+// IMGUI_IMPL_METAL_CPP in src/buildfile), and the symbols resolve.
+
 int main ()
 {
-  using namespace std;
-  using namespace imgui_render_metal;
-
-  // Basics.
-  //
-  {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
-  }
+  assert ((void*) &ImGui_ImplMetal_Init     != nullptr);
+  assert ((void*) &ImGui_ImplMetal_Shutdown != nullptr);
 }
