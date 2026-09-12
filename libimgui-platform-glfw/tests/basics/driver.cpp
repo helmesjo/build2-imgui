@@ -1,34 +1,17 @@
-#include <sstream>
-#include <stdexcept>
-
-#include <imgui-platform-glfw.h>
+#include <imgui_impl_glfw.h>
 
 #undef NDEBUG
 #include <cassert>
 
+// Smoke test: every entry point needs a live GLFWwindow, which needs a
+// display -- not safe to create in a headless CI environment. Just prove
+// the library links and the symbols resolve.
+
 int main ()
 {
-  using namespace std;
-  using namespace imgui_platform_glfw;
-
-  // Basics.
-  //
-  {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
-  }
+  assert ((void*) &ImGui_ImplGlfw_InitForOpenGL != nullptr);
+  assert ((void*) &ImGui_ImplGlfw_InitForVulkan != nullptr);
+  assert ((void*) &ImGui_ImplGlfw_InitForOther  != nullptr);
+  assert ((void*) &ImGui_ImplGlfw_Shutdown      != nullptr);
+  assert ((void*) &ImGui_ImplGlfw_NewFrame      != nullptr);
 }
