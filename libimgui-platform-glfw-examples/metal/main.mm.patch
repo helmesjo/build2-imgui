@@ -1,0 +1,11 @@
+--- main.mm.orig	2026-09-12 02:54:13
++++ main.mm	2026-09-12 14:22:04
+@@ -69,7 +69,7 @@
+     id <MTLCommandQueue> commandQueue = [device newCommandQueue];
+ 
+     // Setup Platform/Renderer backends
+-    ImGui_ImplGlfw_InitForOpenGL(window, true);
++    ImGui_ImplGlfw_InitForOther(window, true);
+     ImGui_ImplMetal_Init(device);
+ 
+     // Load Fonts
