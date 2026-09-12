@@ -1,7 +1,10 @@
-# libimgui-render-vulkan - A C++ library
+# libimgui-render-vulkan - Dear ImGui renderer backend for Vulkan
 
-This is a `build2` package for the [`<UPSTREAM-NAME>`](https://<UPSTREAM-URL>)
-C++ library. It provides <SUMMARY-OF-FUNCTIONALITY>.
+This is a `build2` package for the [Dear ImGui](https://github.com/ocornut/imgui)
+Vulkan renderer backend, built from its `docking` branch. It renders
+`libimgui` draw data using [Vulkan](https://www.vulkan.org), via
+`libvulkan-loader`. A platform backend (for example
+`libimgui-platform-glfw`) is also needed.
 
 
 ## Usage
@@ -10,13 +13,13 @@ To start using `libimgui-render-vulkan` in your project, add the following `depe
 value to your `manifest`, adjusting the version constraint as appropriate:
 
 ```
-depends: libimgui-render-vulkan ^<VERSION>
+depends: libimgui-render-vulkan ^1.92.9
 ```
 
 Then import the library in your `buildfile`:
 
 ```
-import libs = libimgui-render-vulkan%lib{<TARGET>}
+import libs = libimgui-render-vulkan%lib{imgui-render-vulkan}
 ```
 
 
@@ -25,18 +28,10 @@ import libs = libimgui-render-vulkan%lib{<TARGET>}
 This package provides the following importable targets:
 
 ```
-lib{<TARGET>}
+lib{imgui-render-vulkan}
 ```
-
-<DESCRIPTION-OF-IMPORTABLE-TARGETS>
 
 
 ## Configuration variables
 
-This package provides the following configuration variables:
-
-```
-[bool] config.libimgui_render_vulkan.<VARIABLE> ?= false
-```
-
-<DESCRIPTION-OF-CONFIG-VARIABLES>
+This package provides no configuration variables.
