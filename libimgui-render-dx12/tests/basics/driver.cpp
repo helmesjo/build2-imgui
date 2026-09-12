@@ -1,34 +1,29 @@
-#include <sstream>
-#include <stdexcept>
+// Smoke test: this backend is Windows-only (see manifest and src/buildfile).
+// On other platforms the library is intentionally empty, so there is
+// nothing to test there. The header itself is also Windows-only in
+// practice: it pulls in <d3d12sdklayers.h>, whose WSL-stub fallback (from
+// libdirectx-headers, for non-Windows tooling) does not fully define
+// IUnknown on its own, so don't even attempt to parse it here.
+//
+// Every entry point needs a D3D12 device, so they are only referenced: the
+// test runs without arguments so the branch is never taken, but the symbols
+// still have to resolve at link time.
 
-#include <imgui-render-dx12.h>
+#ifdef _WIN32
+#include <imgui_impl_dx12.h>
 
-#undef NDEBUG
-#include <cassert>
-
-int main ()
+int main (int argc, char*[])
 {
-  using namespace std;
-  using namespace imgui_render_dx12;
-
-  // Basics.
-  //
+  if (argc > 1)
   {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
+    ImGui_ImplDX12_InitInfo* info (nullptr);
+    ImGui_ImplDX12_Init (info);
+    ImGui_ImplDX12_NewFrame ();
+    ImGui_ImplDX12_Shutdown ();
   }
 }
+#else
+int main ()
+{
+}
+#endif
