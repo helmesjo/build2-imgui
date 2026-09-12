@@ -1,34 +1,17 @@
-#include <sstream>
-#include <stdexcept>
-
-#include <imgui-platform-win32.h>
+#include <imgui_impl_win32.h>
 
 #undef NDEBUG
 #include <cassert>
 
+// This backend is Windows-only (see manifest and src/buildfile); on other
+// platforms the library is intentionally empty, so there is nothing to
+// link-test here.
+
 int main ()
 {
-  using namespace std;
-  using namespace imgui_platform_win32;
-
-  // Basics.
-  //
-  {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
-  }
+#ifdef _WIN32
+  assert ((void*) &ImGui_ImplWin32_Init     != nullptr);
+  assert ((void*) &ImGui_ImplWin32_Shutdown != nullptr);
+  assert ((void*) &ImGui_ImplWin32_NewFrame != nullptr);
+#endif
 }
