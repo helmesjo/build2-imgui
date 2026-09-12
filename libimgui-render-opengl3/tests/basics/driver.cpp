@@ -1,34 +1,15 @@
-#include <sstream>
-#include <stdexcept>
-
-#include <imgui-render-opengl3.h>
+#include <imgui_impl_opengl3.h>
 
 #undef NDEBUG
 #include <cassert>
 
+// Smoke test: ImGui_ImplOpenGL3_Init() needs a current OpenGL context,
+// which needs a real window/GPU -- not safe to assume in a headless CI
+// environment. Just prove the library links and the symbols resolve.
+
 int main ()
 {
-  using namespace std;
-  using namespace imgui_render_opengl3;
-
-  // Basics.
-  //
-  {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
-
-  // Empty name.
-  //
-  try
-  {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
-  }
+  assert ((void*) &ImGui_ImplOpenGL3_Init     != nullptr);
+  assert ((void*) &ImGui_ImplOpenGL3_Shutdown != nullptr);
+  assert ((void*) &ImGui_ImplOpenGL3_NewFrame != nullptr);
 }
