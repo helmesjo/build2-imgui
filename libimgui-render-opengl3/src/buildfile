@@ -1,6 +1,15 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui}
+
+# No explicit link to the system OpenGL library: the bundled loader in
+# imgui_impl_opengl3_loader.h resolves all GL entry points at runtime via
+# dlopen()/dlsym() (GetProcAddress() on Windows). On older glibc, dlopen()
+# itself lives in libdl rather than libc.
+#
+if ($cxx.target.class == 'linux')
+  cxx.libs += -ldl
 
 # Public headers.
 #
