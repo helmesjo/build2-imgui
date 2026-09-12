@@ -1,6 +1,10 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui}
+
+if ($cxx.target.class == 'macos')
+  import intf_libs += libmetal-cpp%lib{metal-cpp}
 
 # Public headers.
 #
@@ -14,7 +18,26 @@ lib{imgui-render-metal}: libul{imgui-render-metal}: $pub/{$pub_hdrs}
 
 # Private headers and sources as well as dependencies.
 #
+# This backend is macOS-only (Objective-C++); exclude the source on other
+# platforms so the library builds (empty) instead of failing to compile.
+#
 libul{imgui-render-metal}: {hxx cxx}{**} $impl_libs $intf_libs
+libul{imgui-render-metal}: mm{imgui_impl_metal}: include = ($cxx.target.class == 'macos')
+
+# Use the metal-cpp (C++) API instead of the default Objective-C one, per
+# libmetal-cpp above. Both the implementation and consumers of the public
+# header need this defined identically. Only meaningful (and only safe to
+# define) on macOS: that's the only platform where libmetal-cpp is actually
+# a dependency (see intf_libs above), and imgui_impl_metal.h uses this macro
+# to choose between the ObjC++ and metal-cpp API surfaces -- leaving it
+# defined elsewhere would make any downstream consumer of the header try
+# (and fail) to pull in <Metal/Metal.hpp>.
+#
+if ($cxx.target.class == 'macos')
+{
+  cxx.poptions += -DIMGUI_IMPL_METAL_CPP
+  cxx.libs += -framework Metal -framework QuartzCore -framework Cocoa -framework Foundation
+}
 
 libs{imgui-render-metal}: def{imgui-render-metal}: include = ($cxx.target.system == 'win32-msvc')
 def{imgui-render-metal}: libul{imgui-render-metal}
@@ -38,6 +61,12 @@ lib{imgui-render-metal}:
 {
   cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
   cxx.export.libs = $intf_libs
+}
+
+if ($cxx.target.class == 'macos')
+{
+  lib{imgui-render-metal}: cxx.export.poptions += -DIMGUI_IMPL_METAL_CPP
+  lib{imgui-render-metal}: cxx.export.libs += -framework Metal -framework QuartzCore -framework Cocoa -framework Foundation
 }
 
 # For pre-releases use the complete version to make sure they cannot
