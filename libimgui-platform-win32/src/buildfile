@@ -1,6 +1,7 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+
+import intf_libs += libimgui%lib{imgui}
 
 # Public headers.
 #
@@ -14,7 +15,19 @@ lib{imgui-platform-win32}: libul{imgui-platform-win32}: $pub/{$pub_hdrs}
 
 # Private headers and sources as well as dependencies.
 #
-libul{imgui-platform-win32}: {hxx cxx}{**} $impl_libs $intf_libs
+# This backend is Windows-only; exclude the source on other platforms so
+# the library builds (empty) instead of failing to compile.
+#
+libul{imgui-platform-win32}: {hxx cxx}{** -imgui_impl_win32} $impl_libs $intf_libs
+libul{imgui-platform-win32}: cxx{imgui_impl_win32}: include = ($cxx.target.class == 'windows')
+
+if ($cxx.target.class == 'windows')
+{
+  if ($cxx.target.system == 'mingw32')
+    cxx.libs += -lgdi32 -ldwmapi
+  else
+    cxx.libs += gdi32.lib dwmapi.lib
+}
 
 libs{imgui-platform-win32}: def{imgui-platform-win32}: include = ($cxx.target.system == 'win32-msvc')
 def{imgui-platform-win32}: libul{imgui-platform-win32}
