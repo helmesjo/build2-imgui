@@ -41,6 +41,15 @@ cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
 
+# On MSVC the backend's own declarations (imgui_impl_opengl3.h) use
+# IMGUI_IMPL_API, which imgui.h only defaults to IMGUI_API if it is not
+# already defined. Export them by defining it directly. The
+# IMGUI_API=dllimport inherited from libimgui's export options keeps
+# marking libimgui's own symbols.
+#
+if ($cxx.target.system == 'win32-msvc')
+  objs{*}: cxx.poptions += '-DIMGUI_IMPL_API=__declspec(dllexport)'
+
 # Export options.
 #
 lib{imgui-render-opengl3}:
