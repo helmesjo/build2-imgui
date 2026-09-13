@@ -40,6 +40,14 @@ cxx.poptions += -DGLFW_INCLUDE_NONE
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
 
+# Override the inherited IMGUI_API=dllimport (from libimgui's export
+# options) back to dllexport: some definitions here repeat the macro,
+# and dllimport on a definition is a hard MSVC error. coptions, not
+# poptions, so it lands after the inherited poptions on the compile line.
+#
+if ($cxx.target.system == 'win32-msvc')
+  objs{*}: cxx.coptions += '-DIMGUI_API=__declspec(dllexport)'
+
 # Export options.
 #
 lib{imgui-platform-glfw}:

@@ -34,6 +34,15 @@ cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
 
+# Backend declarations (imgui_impl_vulkan.h) use IMGUI_IMPL_API, not
+# IMGUI_API: imgui.h falls IMGUI_IMPL_API back to IMGUI_API only via
+# #ifndef. Define IMGUI_IMPL_API directly for this backend's own exports;
+# leave the inherited IMGUI_API=dllimport (from libimgui's export
+# options, marking libimgui's own symbols) untouched.
+#
+if ($cxx.target.system == 'win32-msvc')
+  objs{*}: cxx.coptions += '-DIMGUI_IMPL_API=__declspec(dllexport)'
+
 # Export options.
 #
 lib{imgui-render-vulkan}:

@@ -32,6 +32,16 @@ cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
 
+# On MSVC, def{} above auto-exports functions but not data (e.g., the
+# GImGui pointer in imgui_internal.h). IMGUI_API defaults to empty (see
+# imgui.h), so only override it for the shared build/import side.
+#
+# Note: single-quoted (not double-quoted) so the literal parentheses in
+# __declspec(...) survive buildfile parsing instead of being eaten.
+#
+if ($cxx.target.system == 'win32-msvc')
+  objs{*}: cxx.poptions += '-DIMGUI_API=__declspec(dllexport)'
+
 # Export options.
 #
 lib{imgui}:
@@ -39,6 +49,8 @@ lib{imgui}:
   cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
   cxx.export.libs = $intf_libs
 }
+if ($cxx.target.system == 'win32-msvc')
+  libs{imgui}: cxx.export.poptions += '-DIMGUI_API=__declspec(dllimport)'
 
 # For pre-releases use the complete version to make sure they cannot
 # be used in place of another pre-release or the final version. See
