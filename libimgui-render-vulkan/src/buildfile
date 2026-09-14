@@ -43,6 +43,13 @@ if ($cxx.target.system == 'mingw32')
 if ($cxx.target.system == 'win32-msvc')
   objs{*}: cxx.poptions += '-DIMGUI_IMPL_API=__declspec(dllexport)'
 
+# GCC false positive: ImVector::push_back()'s reserve()-then-memcpy
+# pattern (imgui.h) trips -Wstringop-overflow because GCC's escape
+# analysis can't see across the inlined reserve() call. Not a real bug.
+#
+if ($cxx.id == 'gcc')
+  cxx.coptions += -Wno-stringop-overflow
+
 # Export options.
 #
 lib{imgui-render-vulkan}:
