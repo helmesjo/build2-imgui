@@ -1,0 +1,13 @@
+libs =
+import libs += libimgui-platform-osx%lib{imgui-platform-osx} \
+               libimgui-render-metal%lib{imgui-render-metal}
+
+exe{example-osx-metal}: {hxx mm}{**} $libs
+
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+# main.mm drives its MTKView through MetalKit directly; neither the osx
+# platform backend nor the metal renderer backend exports it since only
+# this example needs it.
+#
+cxx.libs += -framework MetalKit

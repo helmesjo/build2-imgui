@@ -1,1 +1,5 @@
-./: {*/ -build/} doc{README.md PACKAGE-README.md CHANGELOG.txt} legal{LICENSE.txt} manifest
+# This whole package is macOS-only (see manifest).
+#
+./: {*/ -build/ -metal/} doc{README.md PACKAGE-README.md CHANGELOG.txt} legal{LICENSE.txt} manifest
+
+./: metal/: include = ($cxx.target.class == 'macos')
