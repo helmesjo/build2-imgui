@@ -49,7 +49,14 @@ if ($cxx.target.system == 'mingw32')
 # marking libimgui's own symbols.
 #
 if ($cxx.target.system == 'win32-msvc')
+{
   objs{*}: cxx.poptions += '-DIMGUI_IMPL_API=__declspec(dllexport)'
+
+  # def{} exports functions but not data. imgl3wProcs is data, and
+  # imgl3wGetProcAddress is part of the same GL3W_API surface.
+  #
+  objs{*}: cxx.poptions += '-DGL3W_API=__declspec(dllexport)'
+}
 
 # Export options.
 #
@@ -60,6 +67,9 @@ lib{imgui-render-opengl3}:
   cxx.export.libs = $intf_libs
   cxx.pkgconfig.include = include/ include/backends/
 }
+
+if ($cxx.target.system == 'win32-msvc')
+  libs{imgui-render-opengl3}: cxx.export.poptions += '-DGL3W_API=__declspec(dllimport)'
 
 # For pre-releases use the complete version to make sure they cannot
 # be used in place of another pre-release or the final version. See
