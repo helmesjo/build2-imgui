@@ -5,6 +5,8 @@ Vulkan renderer backend, built from its `docking` branch. It renders
 `libimgui` draw data using [Vulkan](https://www.vulkan.org), via
 `libvulkan-loader`. A platform backend (for example
 `libimgui-platform-glfw`) is also needed.
+The public header is `<backends/imgui_impl_vulkan.h>`.
+`#include "imgui_impl_vulkan.h"` also works.
 
 
 ## Usage

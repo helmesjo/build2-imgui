@@ -5,6 +5,8 @@ GLFW platform (input/window) backend, built from its `docking` branch. It
 handles mouse, keyboard, gamepad, and window input for `libimgui` via
 [GLFW](https://www.glfw.org). A renderer backend (for example
 `libimgui-render-vulkan` or `libimgui-render-opengl3`) is also needed.
+The public header is `<backends/imgui_impl_glfw.h>`.
+`#include "imgui_impl_glfw.h"` also works.
 
 
 ## Usage

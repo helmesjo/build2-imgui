@@ -5,6 +5,8 @@ native Win32 platform (input/window) backend, built from its `docking`
 branch. It handles mouse, keyboard, and window input for `libimgui` using
 the Windows API directly, with no extra dependency. A renderer backend
 (for example `libimgui-render-dx12`) is also needed.
+The public header is `<backends/imgui_impl_win32.h>`.
+`#include "imgui_impl_win32.h"` also works.
 
 This package is Windows-only.
 

@@ -5,6 +5,8 @@ Direct3D 12 renderer backend, built from its `docking` branch. It renders
 `libimgui` draw data using Direct3D 12, via the portable `libdirectx-headers`
 (and `libdirectx-guids`) headers rather than the Windows SDK's own copies.
 A platform backend (for example `libimgui-platform-win32`) is also needed.
+The public header is `<backends/imgui_impl_dx12.h>`.
+`#include "imgui_impl_dx12.h"` also works.
 
 This package is Windows-only.
 

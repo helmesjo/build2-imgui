@@ -7,6 +7,8 @@ rather than the Objective-C Metal API (this package compiles with
 `IMGUI_IMPL_METAL_CPP` defined, so `MTL::Device*` etc. are used instead of
 `id<MTLDevice>`, and the public header is plain C++, not Objective-C++). A
 platform backend (for example `libimgui-platform-osx`) is also needed.
+The public header is `<backends/imgui_impl_metal.h>`.
+`#include "imgui_impl_metal.h"` also works.
 
 This package is macOS-only.
 

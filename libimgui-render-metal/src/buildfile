@@ -50,7 +50,8 @@ out_pfx_src = [dir_path] $out_root/src/
 src_pfx_src = [dir_path] $src_root/src/
 
 cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
-                "-I$out_pfx_inc" "-I$src_pfx_inc"
+                "-I$out_pfx_inc" "-I$src_pfx_inc" \
+                "-I$out_pfx_inc/backends" "-I$src_pfx_inc/backends"
 
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
@@ -59,8 +60,10 @@ if ($cxx.target.system == 'mingw32')
 #
 lib{imgui-render-metal}:
 {
-  cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
+  cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc" \
+                        "-I$out_pfx_inc/backends" "-I$src_pfx_inc/backends"
   cxx.export.libs = $intf_libs
+  cxx.pkgconfig.include = include/ include/backends/
 }
 
 if ($cxx.target.class == 'macos')
