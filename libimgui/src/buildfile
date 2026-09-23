@@ -41,6 +41,11 @@ if $config.libimgui.freetype
                   "-I$out_root/include/misc/freetype" \
                   "-I$src_root/include/misc/freetype"
 
+# ImWchar is part of the installed imgui.h, so this macro is also exported.
+#
+if $config.libimgui.use_wchar32
+  cxx.poptions += -DIMGUI_USE_WCHAR32
+
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
 
@@ -67,6 +72,9 @@ lib{imgui}:
 #
 if $config.libimgui.freetype
   lib{imgui}: cxx.export.poptions += -DIMGUI_ENABLE_FREETYPE
+
+if $config.libimgui.use_wchar32
+  lib{imgui}: cxx.export.poptions += -DIMGUI_USE_WCHAR32
 
 if ($cxx.target.system == 'win32-msvc')
   libs{imgui}: cxx.export.poptions += '-DIMGUI_API=__declspec(dllimport)'
