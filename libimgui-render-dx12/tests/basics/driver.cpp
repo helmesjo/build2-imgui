@@ -10,7 +10,7 @@
 // still have to resolve at link time.
 
 #ifdef _WIN32
-#include <backends/imgui_impl_dx12.h>
+#include <imgui/backends/imgui_impl_dx12.h>
 
 int main (int argc, char*[])
 {

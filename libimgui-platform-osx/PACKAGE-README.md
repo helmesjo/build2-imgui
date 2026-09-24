@@ -5,8 +5,8 @@ native macOS (Cocoa) platform (input/window) backend, built from its
 `docking` branch. It handles mouse, keyboard, gamepad, and window input for
 `libimgui` using AppKit directly, with no extra dependency. A renderer
 backend (for example `libimgui-render-metal`) is also needed.
-The public header is `<backends/imgui_impl_osx.h>`.
-`#include "imgui_impl_osx.h"` also works.
+The public header is `<imgui/backends/imgui_impl_osx.h>`.
+`#include <backends/imgui_impl_osx.h>` and `#include "imgui_impl_osx.h"` also work.
 
 This package is macOS-only. Its public header declares `NSView`-based
 entry points and is only usable from Objective-C++ (`.mm`) consumer code.

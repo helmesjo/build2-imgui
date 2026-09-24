@@ -1,5 +1,5 @@
-#include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_opengl3_loader.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_opengl3_loader.h>
 
 // Smoke test: every entry point needs a current OpenGL context, which needs
 // a real window and GPU that a headless CI environment does not have. So

@@ -1,4 +1,4 @@
-#include <backends/imgui_impl_metal.h>
+#include <imgui/backends/imgui_impl_metal.h>
 
 // Smoke test: every entry point needs an MTL::Device, which needs a GPU that
 // a headless CI runner may not have. So they are only referenced: the test

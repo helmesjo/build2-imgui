@@ -5,9 +5,10 @@ OpenGL 3(+) renderer backend, built from its `docking` branch. It renders
 `libimgui` draw data using OpenGL, resolving all entry points itself at
 runtime (a bundled loader), with no extra dependency. A platform backend
 (for example `libimgui-platform-glfw`) is also needed.
-The public headers are `<backends/imgui_impl_opengl3.h>` and
-`<backends/imgui_impl_opengl3_loader.h>`.
-`#include "imgui_impl_opengl3.h"` also works.
+The public headers are `<imgui/backends/imgui_impl_opengl3.h>` and
+`<imgui/backends/imgui_impl_opengl3_loader.h>`.
+`#include <backends/imgui_impl_opengl3.h>` and
+`#include "imgui_impl_opengl3.h"` also work.
 The loader header is installed so a consumer can call through the same
 loader this backend was compiled with. `imgl3wGetProcAddress` and
 `imgl3wProcs` are exported for that. The proc-table layout is upstream's

@@ -40,10 +40,13 @@ out_pfx_inc = [dir_path] $out_root/include/
 src_pfx_inc = [dir_path] $src_root/include/
 out_pfx_src = [dir_path] $out_root/src/
 src_pfx_src = [dir_path] $src_root/src/
+out_pfx_inc_unq = [dir_path] $out_root/include/imgui/
+src_pfx_inc_unq = [dir_path] $src_root/include/imgui/
 
 cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
                 "-I$out_pfx_inc" "-I$src_pfx_inc" \
-                "-I$out_pfx_inc/backends" "-I$src_pfx_inc/backends"
+                "-I$out_pfx_inc_unq" "-I$src_pfx_inc_unq" \
+                "-I$out_pfx_inc_unq/backends" "-I$src_pfx_inc_unq/backends"
 
 if ($cxx.target.system == 'mingw32')
   cxx.loptions += -Wl,--export-all-symbols
@@ -62,9 +65,10 @@ if ($cxx.target.system == 'win32-msvc')
 lib{imgui-render-dx12}:
 {
   cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc" \
-                        "-I$out_pfx_inc/backends" "-I$src_pfx_inc/backends"
+                        "-I$out_pfx_inc_unq" "-I$src_pfx_inc_unq" \
+                        "-I$out_pfx_inc_unq/backends" "-I$src_pfx_inc_unq/backends"
   cxx.export.libs = $intf_libs
-  cxx.pkgconfig.include = include/ include/backends/
+  cxx.pkgconfig.include = include/ include/imgui/ include/imgui/backends/
 }
 
 # For pre-releases use the complete version to make sure they cannot

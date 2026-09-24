@@ -1,4 +1,4 @@
-#include <backends/imgui_impl_osx.h>
+#include <imgui/backends/imgui_impl_osx.h>
 
 // Smoke test: every entry point needs a live NSView, which needs a window
 // server connection that a headless CI environment may not have. So they

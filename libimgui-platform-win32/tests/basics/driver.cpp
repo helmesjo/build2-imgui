@@ -1,4 +1,4 @@
-#include <backends/imgui_impl_win32.h>
+#include <imgui/backends/imgui_impl_win32.h>
 
 // Smoke test: this backend is Windows-only (see manifest and src/buildfile).
 // On other platforms the library is intentionally empty, so there is
